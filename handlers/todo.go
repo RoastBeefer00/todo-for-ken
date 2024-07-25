@@ -17,23 +17,30 @@ func Render(ctx echo.Context, statusCode int, t templ.Component) error {
 	return t.Render(ctx.Request().Context(), ctx.Response().Writer)
 }
 
-func getTodo(id int) (services.Todo, error) {
-	for _, todo := range services.Todos {
+func getTodo(id int) (services.Todo, int, error) {
+	for i, todo := range services.Todos {
 		if todo.Id == id {
-			return todo, nil
+			return todo, i, nil
 		}
 	}
-	return services.Todo{}, fmt.Errorf("no todo with id %d", id)
+	return services.Todo{}, 0, fmt.Errorf("no todo with id %d", id)
 }
 
-func removeTodo(todos []services.Todo, id int) []services.Todo {
-	return append(todos[:id], todos[id+1:]...)
+func removeTodo(todos []services.Todo, id int) ([]services.Todo, error) {
+	for i, todo := range services.Todos {
+		if todo.Id == id {
+			return append(todos[:i], todos[i+1:]...), nil
+		}
+	}
+	return []services.Todo{}, fmt.Errorf("no todo with id %d", id)
 }
 
 func NewTodo(c echo.Context) error {
 	name := c.FormValue("todo")
+	services.Count++
 	todo := services.Todo{
 		Name: name,
+		Id:   services.Count,
 	}
 	services.Todos = append(services.Todos, todo)
 	return Render(c, http.StatusOK, views.Todo(todo))
@@ -44,13 +51,12 @@ func DeleteTodo(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	services.Todos = append(services.Todos[:id], services.Todos[id+1:]...)
-	todo, err := getTodo(id)
+	services.Todos, err = removeTodo(services.Todos, id)
 	if err != nil {
 		return err
 	}
 
-	return Render(c, http.StatusOK, views.Todo(todo))
+	return c.NoContent(200)
 }
 
 func ToggleCompleteTodo(c echo.Context) error {
@@ -58,6 +64,11 @@ func ToggleCompleteTodo(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	services.Todos[id].Complete = !services.Todos[id].Complete
-	return Render(c, http.StatusOK, views.Todo(services.Todos[id]))
+	todo, index, err := getTodo(id)
+	if err != nil {
+		return err
+	}
+	todo.Complete = !todo.Complete
+	services.Todos[index] = todo
+	return Render(c, http.StatusOK, views.Todo(todo))
 }

@@ -6,14 +6,26 @@ import (
 )
 
 templ Todo(todo services.Todo) {
-<div id={ "todo-" + strconv.Itoa(todo.Id) } class="flex">
-    <span class="text-white">
-        { todo.Name } - {
-        strconv.FormatBool(todo.Complete) }
-    </span>
-    <button class="border border-black rounded p-1" hx-post={ "/todo/toggle/" + strconv.Itoa(todo.Id) }
-        hx-target={ "#todo-" + strconv.Itoa(todo.Id) }>Toggle</button>
-    <button class="border border-black rounded p-1" hx-delete={ "/todo/delete/" + strconv.Itoa(todo.Id) }
-        hx-target={ "#todo-" + strconv.Itoa(todo.Id) }>Delete</button>
-</div>
+<tr id={ "todo-" + strconv.Itoa(todo.Id) } class="p-2 w-full">
+    <td class="w-3/5 text-center">
+        <span class="text-crust">
+            { todo.Name }
+        </span>
+    </td>
+    <td class="w-1/5 text-center">
+        <span class="text-crust">
+            { strconv.FormatBool(todo.Complete) }
+        </span>
+    </td>
+    <td class="w-1/5">
+        <div class="flex justify-center">
+            <button class="border border-black rounded p-1 mx-1 bg-green" hx-post={ "/todo/toggle/" +
+                strconv.Itoa(todo.Id) } hx-target={ "#todo-" + strconv.Itoa(todo.Id) }
+                hx-swap="outerHTML">Toggle</button>
+            <button class="border border-black rounded p-1 mx-1 bg-red" hx-delete={ "/todo/delete/" +
+                strconv.Itoa(todo.Id) } hx-target={ "#todo-" + strconv.Itoa(todo.Id) }
+                hx-swap="outerHTML">Delete</button>
+        </div>
+    </td>
+</tr>
 }

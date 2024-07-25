@@ -6,4 +6,7 @@ type Todo struct {
 	Complete bool
 }
 
-var Todos []Todo
+var (
+	Count int = 0
+	Todos []Todo
+)
