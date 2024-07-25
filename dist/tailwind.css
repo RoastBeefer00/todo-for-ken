@@ -587,9 +587,26 @@ video {
   display: flex;
 }
 
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-black {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+
 .bg-base {
   --tw-bg-opacity: 1;
   background-color: rgba(var(--ctp-base), var(--tw-bg-opacity));
+}
+
+.p-1 {
+  padding: 0.25rem;
 }
 
 .text-white {

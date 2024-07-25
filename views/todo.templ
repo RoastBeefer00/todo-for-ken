@@ -1,9 +1,19 @@
 package views
 
-import "strconv"
+import (
+"ken/services"
+"strconv"
+)
 
-templ Todo(text string, id int, complete bool) {
-<div class="flex">
-    <span class="text-white">{ strconv.Itoa(id) } - { text } - { strconv.FormatBool(complete) }</span>
+templ Todo(todo services.Todo) {
+<div id={ "todo-" + strconv.Itoa(todo.Id) } class="flex">
+    <span class="text-white">
+        { todo.Name } - {
+        strconv.FormatBool(todo.Complete) }
+    </span>
+    <button class="border border-black rounded p-1" hx-post={ "/todo/toggle/" + strconv.Itoa(todo.Id) }
+        hx-target={ "#todo-" + strconv.Itoa(todo.Id) }>Toggle</button>
+    <button class="border border-black rounded p-1" hx-delete={ "/todo/delete/" + strconv.Itoa(todo.Id) }
+        hx-target={ "#todo-" + strconv.Itoa(todo.Id) }>Delete</button>
 </div>
 }

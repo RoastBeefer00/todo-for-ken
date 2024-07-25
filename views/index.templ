@@ -18,7 +18,7 @@ templ Index() {
 
 <body id="body" class="bg-base">
     <div id="ken">
-        <form hx-post="/todo" hx-target="#ken" hx-swap="afterend" hx-indicator="#spinner">
+        <form hx-post="/todo" hx-target="#ken" hx-swap="beforeend">
             <input id="todo" type="text" name="todo" placeholder="What needs to be done?" />
         </form>
     </div>

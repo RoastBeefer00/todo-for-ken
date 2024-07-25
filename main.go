@@ -39,6 +39,8 @@ func main() {
 		return Render(c, http.StatusOK, views.Index())
 	})
 	e.POST("/todo", handlers.NewTodo)
+	e.POST("/todo/toggle/{id}", handlers.ToggleCompleteTodo)
+	e.DELETE("/todo/delete/{id}", handlers.DeleteTodo)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
