@@ -1,0 +1,9 @@
+package views
+
+import "strconv"
+
+templ Todo(text string, id int, complete bool) {
+<div class="flex">
+    <span class="text-white">{ strconv.Itoa(id) } - { text } - { strconv.FormatBool(complete) }</span>
+</div>
+}
